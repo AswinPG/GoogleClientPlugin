@@ -1,4 +1,10 @@
-﻿using Microsoft.Maui.LifecycleEvents;
+﻿#if ANDROID
+using Android.Content.PM;
+using Android.Content;
+using Java.Security;
+#endif
+
+using Microsoft.Maui.LifecycleEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +23,7 @@ namespace Plugin.Maui.GoogleClient
         public static MauiAppBuilder UseGoogleLogin(this MauiAppBuilder builder)
         {
 #if ANDROID
-            GoogleClientManager.Initialize(Platform.CurrentActivity);
+            //GoogleClientManager.Initialize(Platform.CurrentActivity);
 #elif IOS
             GoogleClientManager.Initialize();
 #endif
@@ -30,6 +36,12 @@ namespace Plugin.Maui.GoogleClient
                     d.OnActivityResult((activity, requestCode, resultCode, data) =>
                     {
                         GoogleClientManager.OnAuthCompleted(requestCode, resultCode, data);
+                    });
+                    d.OnCreate((activity, bundle) =>
+                    {
+                        GoogleClientManager.Initialize(Platform.CurrentActivity, null, "808874530445-7q8nubv1u67qpp97pku6ho2lllcdhvqj.apps.googleusercontent.com");
+                        //GoogleClientManager.Initialize(Platform.CurrentActivity);
+                        PrintHashKey(activity.BaseContext);
                     });
                 });
 #elif IOS
@@ -55,6 +67,33 @@ namespace Plugin.Maui.GoogleClient
         /// <param name="builder"></param>
         /// <param name="backPressHandler"></param>
         /// <returns></returns>
+        /// 
+#if ANDROID
+        public static void PrintHashKey(Context pContext)
+        {
+
+            try
+            {
+                PackageInfo info = Android.App.Application.Context.PackageManager.GetPackageInfo(Android.App.Application.Context.PackageName, PackageInfoFlags.Signatures);
+                foreach (var signature in info.Signatures)
+                {
+                    MessageDigest md = MessageDigest.GetInstance("SHA");
+                    md.Update(signature.ToByteArray());
+
+                    System.Diagnostics.Debug.WriteLine(BitConverter.ToString(md.Digest()).Replace("-", ":"));
+                }
+            }
+            catch (NoSuchAlgorithmException e)
+            {
+                System.Diagnostics.Debug.WriteLine(e);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e);
+            }
+
+        }
+#endif
 
     }
 }
