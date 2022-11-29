@@ -39,7 +39,7 @@ namespace Plugin.Maui.GoogleClient
                     });
                     d.OnCreate((activity, bundle) =>
                     {
-                        GoogleClientManager.Initialize(Platform.CurrentActivity, null, "808874530445-7q8nubv1u67qpp97pku6ho2lllcdhvqj.apps.googleusercontent.com");
+                        GoogleClientManager.Initialize(Platform.CurrentActivity, null, "808874530445-mnn9trekb4de3j6lfeurrm36sog8dq8k.apps.googleusercontent.com");
                         //GoogleClientManager.Initialize(Platform.CurrentActivity);
                         PrintHashKey(activity.BaseContext);
                     });
