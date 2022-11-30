@@ -20,7 +20,7 @@ namespace Plugin.Maui.GoogleClient
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static MauiAppBuilder UseGoogleLogin(this MauiAppBuilder builder)
+        public static MauiAppBuilder UseGoogleLogin(this MauiAppBuilder builder, string apiKey)
         {
 #if ANDROID
             //GoogleClientManager.Initialize(Platform.CurrentActivity);
@@ -39,7 +39,7 @@ namespace Plugin.Maui.GoogleClient
                     });
                     d.OnCreate((activity, bundle) =>
                     {
-                        GoogleClientManager.Initialize(Platform.CurrentActivity, null, "808874530445-mnn9trekb4de3j6lfeurrm36sog8dq8k.apps.googleusercontent.com");
+                        GoogleClientManager.Initialize(Platform.CurrentActivity, null, apiKey);
                         //GoogleClientManager.Initialize(Platform.CurrentActivity);
                         PrintHashKey(activity.BaseContext);
                     });
